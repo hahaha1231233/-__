@@ -1,0 +1,47 @@
+<!-- src/main/resources/templates/question/ask.html -->
+<div th:replace="layout :: ~{::content}" th:remove="tag">
+    <div th:fragment="content">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title mb-4">
+                            <i class="bi bi-question-circle"></i> 提问
+                        </h2>
+
+                        <form action="/questions/ask" method="post">
+                            <div class="mb-4">
+                                <label for="title" class="form-label fw-bold">问题标题</label>
+                                <input type="text" class="form-control form-control-lg"
+                                       id="title" name="title"
+                                       placeholder="请输入问题标题，建议简洁明了"
+                                       required minlength="5" maxlength="200">
+                                <div class="form-text">清晰的问题标题更容易获得回答</div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="content" class="form-label fw-bold">问题详情</label>
+                                <textarea class="form-control" id="content" name="content"
+                                          rows="12" placeholder="请详细描述您的问题..."
+                                          required minlength="10"></textarea>
+                                <div class="form-text">
+                                    <i class="bi bi-info-circle"></i>
+                                    建议包含：具体场景、遇到的问题、尝试过的解决方案
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between">
+                                <a href="/questions" class="btn btn-secondary">
+                                    <i class="bi bi-arrow-left"></i> 返回列表
+                                </a>
+                                <button type="submit" class="btn btn-primary px-4">
+                                    <i class="bi bi-check-circle"></i> 发布问题
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

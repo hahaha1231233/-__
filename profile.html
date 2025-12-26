@@ -1,0 +1,205 @@
+<!-- src/main/resources/templates/auth/profile.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>个人资料 - 问答平台</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <style>
+        .profile-card {
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+<!-- 导航栏 -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="container">
+        <a class="navbar-brand" href="/questions">
+            <i class="bi bi-chat-dots"></i> 问答平台
+        </a>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link" href="/questions">
+                <i class="bi bi-house"></i> 首页
+            </a>
+            <a class="nav-link" href="/questions/ask">
+                <i class="bi bi-plus-circle"></i> 提问
+            </a>
+            <a class="nav-link active" href="/profile">
+                <i class="bi bi-person-circle"></i> 个人资料
+            </a>
+            <form th:action="@{/logout}" method="post" class="nav-item">
+                <button type="submit" class="btn btn-link nav-link">
+                    <i class="bi bi-box-arrow-right"></i> 退出
+                </button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <!-- 消息提示 -->
+    <div th:if="${success}" class="alert alert-success alert-dismissible fade show">
+        <i class="bi bi-check-circle"></i>
+        <span th:text="${success}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show">
+        <i class="bi bi-exclamation-circle"></i>
+        <span th:text="${error}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- 个人资料卡片 -->
+            <div class="card profile-card">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">
+                        <i class="bi bi-person-circle"></i> 个人资料
+                    </h2>
+
+                    <div class="row">
+                        <!-- 基本信息 -->
+                        <div class="col-md-6">
+                            <div class="mb-4">
+                                <h5 class="text-muted mb-3">基本信息</h5>
+                                <div class="row mb-3">
+                                    <div class="col-4 fw-bold">用户名</div>
+                                    <div class="col-8" th:text="${user.username}"></div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-4 fw-bold">邮箱</div>
+                                    <div class="col-8">
+                                            <span th:if="${user.email != null and user.email != ''}"
+                                                  th:text="${user.email}"></span>
+                                        <span th:if="${user.email == null or user.email == ''}"
+                                              class="text-muted">未设置</span>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-4 fw-bold">注册时间</div>
+                                    <div class="col-8">
+                                        <span th:text="${#dates.format(user.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 统计信息 -->
+                        <div class="col-md-6">
+                            <div class="mb-4">
+                                <h5 class="text-muted mb-3">统计信息</h5>
+                                <div class="row">
+                                    <div class="col-6 text-center mb-3">
+                                        <div class="stat-card p-3">
+                                            <div class="display-5 fw-bold" th:text="${#lists.size(user.questions)}">0</div>
+                                            <small>提问</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 text-center mb-3">
+                                        <div class="stat-card p-3">
+                                            <div class="display-5 fw-bold" th:text="${#lists.size(user.replies)}">0</div>
+                                            <small>回复</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 快速操作 -->
+                            <div>
+                                <h5 class="text-muted mb-3">快速操作</h5>
+                                <div class="d-grid gap-2">
+                                    <a href="/questions/ask" class="btn btn-primary">
+                                        <i class="bi bi-plus-circle"></i> 我要提问
+                                    </a>
+                                    <a href="/questions" class="btn btn-outline-secondary">
+                                        <i class="bi bi-list"></i> 查看所有问题
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 最近提问 -->
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title mb-4">
+                        <i class="bi bi-question-circle"></i> 我的提问
+                    </h5>
+
+                    <div th:if="${#lists.isEmpty(user.questions)}" class="text-center py-5">
+                        <i class="bi bi-chat-square-text display-4 text-muted"></i>
+                        <h4 class="mt-3">您还没有提问过</h4>
+                        <p class="text-muted">开始您的第一个提问吧！</p>
+                        <a href="/questions/ask" class="btn btn-primary">
+                            <i class="bi bi-plus-circle"></i> 开始提问
+                        </a>
+                    </div>
+
+                    <div th:unless="${#lists.isEmpty(user.questions)}">
+                        <div th:each="question : ${user.questions}" class="card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div class="flex-grow-1">
+                                        <h6 class="card-title">
+                                            <a th:href="@{/questions/{id}(id=${question.id})}"
+                                               class="text-decoration-none text-dark fw-bold"
+                                               th:text="${question.title}"></a>
+                                        </h6>
+                                        <div class="text-muted small mt-2">
+                                            <i class="bi bi-clock"></i>
+                                            <span th:text="${#dates.format(question.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
+                                            <span class="mx-2">•</span>
+                                            <i class="bi bi-chat"></i>
+                                            <span th:text="${#lists.size(question.replies)}">0</span> 个回复
+                                        </div>
+                                        <p class="card-text mt-2 text-truncate-2" th:text="${question.content}"></p>
+                                    </div>
+                                    <div class="ms-3">
+                                        <a th:href="@{/questions/{id}(id=${question.id})}"
+                                           class="btn btn-outline-primary btn-sm">
+                                            查看
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <a href="/questions" class="btn btn-outline-secondary">
+                                <i class="bi bi-list"></i> 查看所有问题
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 自动关闭警告框
+        setTimeout(function() {
+            document.querySelectorAll('.alert').forEach(alert => {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000);
+    });
+</script>
+</body>
+</html>

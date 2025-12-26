@@ -1,0 +1,48 @@
+/* src/main/resources/static/css/style.css */
+/* 自定义样式可以在这里添加 */
+
+/* 文本截断 */
+.text-truncate-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.text-truncate-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* 代码块样式 */
+pre {
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    padding: 1rem;
+    overflow-x: auto;
+}
+
+code {
+    background-color: #f8f9fa;
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-size: 0.875em;
+}
+
+/* 卡片悬停效果 */
+.hover-shadow {
+    transition: box-shadow 0.3s ease;
+}
+
+.hover-shadow:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .display-6 {
+        font-size: 1.5rem;
+    }
+}

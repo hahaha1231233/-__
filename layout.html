@@ -1,0 +1,22 @@
+<!-- 在layout.html的</body>标签前添加 -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/static/js/marked.js"></script>
+<script src="/static/js/utils.js"></script>
+<script src="/static/js/responsive.js"></script>
+<script src="/static/js/main.js"></script>
+
+<!-- 根据页面需要加载其他JS -->
+<th:block th:if="${#strings.contains(#httpServletRequest.requestURI, 'search')}">
+    <script src="/static/js/search.js"></script>
+</th:block>
+
+<script>
+    // 全局错误处理
+    window.addEventListener('error', function(event) {
+        console.error('JavaScript错误:', event.error);
+    });
+
+    window.addEventListener('unhandledrejection', function(event) {
+        console.error('未处理的Promise拒绝:', event.reason);
+    });
+</script>

@@ -1,0 +1,31 @@
+<!-- src/main/resources/templates/question/list.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>问题列表</title>
+</head>
+<body>
+<!-- 简单的测试页面，不继承layout -->
+<div class="container">
+    <h1>所有问题</h1>
+    <p>共 <span th:text="${#lists.size(questions)}">0</span> 个问题</p>
+
+    <div th:each="question : ${questions}" style="border:1px solid #ccc; margin:10px; padding:10px;">
+        <h3 th:text="${question.title}">标题</h3>
+        <p th:text="${question.content}">内容</p>
+        <small>
+            作者: <span th:text="${question.user.username}">用户名</span> |
+            时间: <span th:text="${#dates.format(question.createdAt, 'yyyy-MM-dd')}">时间</span>
+        </small>
+    </div>
+
+    <div th:if="${#lists.isEmpty(questions)}">
+        <p>暂无问题</p>
+        <a href="/questions/ask">我要提问</a>
+    </div>
+
+    <a href="/questions/ask">提问</a>
+</div>
+</body>
+</html>
